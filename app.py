@@ -1,4 +1,4 @@
-from flask import Flask, Response
+from flask import Flask, Response, request
 import svgcards, requests
 
 app = Flask(__name__)
@@ -10,7 +10,8 @@ def repo_card(owner, repo):
 	resp = requests.get(url)
 	data = resp.json()
 	
-	svg = svgcards.repo(data)
+	theme = request.args.get("theme", "auto")
+	svg = svgcards.repo(data, theme)
 	return Response(svg, mimetype="image/svg+xml")
 
 @app.errorhandler(404)
